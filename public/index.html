@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>StudyRoom — Học nhóm online</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="StudyRoom trang chủ"><span class="brand-icon">SR</span><span>StudyRoom</span></a>
+    <div class="top-actions"><span id="current-user" class="user-pill hidden"></span><button id="logout-btn" class="btn btn-quiet hidden">Đăng xuất</button></div>
+  </header>
+
+  <main>
+    <section id="auth-view" class="auth-layout">
+      <div class="hero">
+        <div class="eyebrow">KHÔNG HỌC MỘT MÌNH</div>
+        <h1>Ý tưởng hay bắt đầu từ <span>học cùng nhau.</span></h1>
+        <p>Tạo phòng học, trao đổi bài vở, chia sẻ tài liệu và cùng nhau tiến bộ.</p>
+        <div class="hero-points"><span>✓ Phòng học riêng</span><span>✓ Chat thảo luận</span><span>✓ Chia sẻ tài liệu</span></div>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs"><button class="tab active" data-auth-tab="login">Đăng nhập</button><button class="tab" data-auth-tab="register">Tạo tài khoản</button></div>
+        <h2 id="auth-title">Chào mừng trở lại!</h2>
+        <p class="muted" id="auth-subtitle">Đăng nhập để vào phòng học của bạn.</p>
+        <form id="auth-form">
+          <label for="username">Tên tài khoản</label>
+          <input id="username" name="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" placeholder="vd: trung_123" required>
+          <small>Dùng 3–20 chữ cái, số hoặc dấu gạch dưới.</small>
+          <label for="password">Mật khẩu</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" placeholder="Ít nhất 8 ký tự" required>
+          <button id="auth-submit" class="btn btn-primary btn-wide" type="submit">Đăng nhập</button>
+          <div id="auth-error" class="notice error hidden" role="alert"></div>
+        </form>
+        <p class="privacy-note">Đừng dùng mật khẩu giống tài khoản quan trọng khác.</p>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="hidden">
+      <div class="welcome-row"><div><div class="eyebrow">KHÔNG GIAN HỌC TẬP CỦA BẠN</div><h1>Phòng học của mình</h1><p class="muted">Tạo phòng mới hoặc nhập mã phòng từ bạn bè.</p></div><div class="avatar" id="user-avatar">S</div></div>
+      <div class="action-grid">
+        <form id="create-room-form" class="panel action-panel"><div class="panel-icon purple">＋</div><h2>Tạo phòng mới</h2><p class="muted">Tạo một không gian riêng cho nhóm học.</p><label for="room-name">Tên phòng</label><input id="room-name" maxlength="60" placeholder="VD: Ôn thi Toán 10" required><label for="room-description">Mô tả (không bắt buộc)</label><input id="room-description" maxlength="250" placeholder="Nội dung ôn tập..."><button class="btn btn-primary btn-wide" type="submit">Tạo phòng</button><div id="create-error" class="notice error hidden"></div></form>
+        <form id="join-room-form" class="panel action-panel"><div class="panel-icon green">↗</div><h2>Tham gia phòng</h2><p class="muted">Nhập mã 8 ký tự do chủ phòng gửi cho bạn.</p><label for="room-code">Mã phòng</label><input id="room-code" maxlength="8" placeholder="A1B2C3D4" autocapitalize="characters" required><div class="spacer"></div><button class="btn btn-outline btn-wide" type="submit">Tham gia phòng</button><div id="join-error" class="notice error hidden"></div></form>
+      </div>
+      <div class="section-heading"><div><h2>Phòng của bạn</h2><p class="muted">Các phòng bạn đã tham gia.</p></div><button id="refresh-rooms" class="btn btn-quiet">↻ Làm mới</button></div>
+      <div id="rooms-list" class="rooms-grid"><div class="empty-state">Đang tải danh sách phòng...</div></div>
+    </section>
+
+    <section id="room-view" class="hidden">
+      <div class="room-top"><button id="back-to-rooms" class="btn btn-quiet">← Danh sách phòng</button><div class="room-title"><div class="eyebrow">PHÒNG HỌC NHÓM</div><h1 id="room-heading">Tên phòng</h1><p id="room-description-view" class="muted"></p></div><button id="copy-code" class="btn btn-outline">Mã: <strong id="room-code-view">--------</strong> ⧉</button></div>
+      <div class="room-layout">
+        <section class="panel chat-panel"><div class="panel-heading"><div><h2>💬 Thảo luận</h2><p class="muted">Trao đổi bài vở với thành viên.</p></div><span class="live-dot">● Trực tuyến</span></div><div id="chat-messages" class="chat-messages" aria-live="polite"><div class="empty-state">Đang tải tin nhắn...</div></div><form id="chat-form" class="chat-form"><input id="chat-input" maxlength="2000" placeholder="Viết tin nhắn... (Enter để gửi)" autocomplete="off" required><button class="btn btn-primary" type="submit" aria-label="Gửi tin nhắn">Gửi ↑</button></form><div id="chat-error" class="notice error hidden"></div></section>
+        <aside class="side-column">
+          <section class="panel files-panel"><div class="panel-heading"><div><h2>📎 Tài liệu</h2><p class="muted">PDF, Office, ảnh, TXT, ZIP</p></div></div><form id="upload-form" class="upload-box"><label class="file-picker" for="file-input"><span class="upload-symbol">＋</span><strong>Chọn file để gửi</strong><small>Tối đa 10 MB mỗi file</small></label><input id="file-input" type="file" accept=".pdf,.txt,.jpg,.jpeg,.png,.webp,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip" hidden><button class="btn btn-primary btn-wide" type="submit">Tải lên</button><div id="file-error" class="notice error hidden"></div></form><div id="files-list" class="files-list"><div class="empty-state">Đang tải file...</div></div></section>
+          <section class="panel members-panel"><div class="panel-heading"><div><h2>👥 Thành viên</h2><p id="member-count" class="muted">Đang tải...</p></div></div><div id="members-list" class="members-list"></div></section>
+        </aside>
+      </div>
+    </section>
+    <div id="global-notice" class="toast hidden" role="status"></div>
+  </main>
+  <footer>StudyRoom · Cùng nhau học tốt hơn <span>•</span> Không chia sẻ mật khẩu với người khác</footer>
+</div>
+</body>
+</html>
